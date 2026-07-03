@@ -10,21 +10,23 @@ import {
   ListItemText,
 } from "@mui/material";
 
-import DashboardCards from "../components/dashboard/DashboardCards";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const drawerWidth = 260;
 
 const menuItems = [
-  "Dashboard",
-  "Renewals",
-  "Hardware Benchmarks",
-  "Vendor Comparison",
-  "Upload Quotes",
-  "Reports",
-  "Settings",
+  { text: "Dashboard", path: "/" },
+  { text: "Renewals", path: "/renewals" },
+  { text: "Hardware Benchmark", path: "/benchmark" },
+  { text: "Vendor Comparison", path: "/vendors" },
+  { text: "Upload Quotes", path: "/upload" },
+  { text: "Reports", path: "/reports" },
+  { text: "Settings", path: "/settings" },
 ];
 
 function MainLayout() {
+  const location = useLocation();
+
   return (
     <Box sx={{ display: "flex" }}>
       {/* Top Navbar */}
@@ -32,7 +34,7 @@ function MainLayout() {
         position="fixed"
         sx={{
           zIndex: 1201,
-          background: "#ffffff",
+          backgroundColor: "#fff",
           color: "#000",
           boxShadow: 1,
         }}
@@ -44,9 +46,7 @@ function MainLayout() {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          <Typography>
-            Welcome, Admin
-          </Typography>
+          <Typography>Welcome, Admin</Typography>
         </Toolbar>
       </AppBar>
 
@@ -58,7 +58,7 @@ function MainLayout() {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            background: "#1E3A8A",
+            backgroundColor: "#1E3A8A",
             color: "#fff",
           },
         }}
@@ -67,9 +67,21 @@ function MainLayout() {
 
         <List>
           {menuItems.map((item) => (
-            <ListItem key={item} disablePadding>
-              <ListItemButton>
-                <ListItemText primary={item} />
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton
+                component={Link}
+                to={item.path}
+                selected={location.pathname === item.path}
+                sx={{
+                  "&.Mui-selected": {
+                    backgroundColor: "#2563EB",
+                  },
+                  "&.Mui-selected:hover": {
+                    backgroundColor: "#2563EB",
+                  },
+                }}
+              >
+                <ListItemText primary={item.text} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -81,22 +93,14 @@ function MainLayout() {
         component="main"
         sx={{
           flexGrow: 1,
-          bgcolor: "#F4F7FC",
+          bgcolor: "#F5F7FB",
           minHeight: "100vh",
           p: 4,
         }}
       >
         <Toolbar />
 
-        <Typography variant="h4" fontWeight="bold">
-  Executive Command Center
-</Typography>
-
-<Typography sx={{ mt: 1, mb: 4, color: "gray" }}>
-  Real-time procurement intelligence and spend oversight.
-</Typography>
-
-<DashboardCards />
+        <Outlet />
       </Box>
     </Box>
   );
